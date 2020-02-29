@@ -41,7 +41,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-vinegar'
 Plug 'preservim/nerdtree'
-" Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -51,10 +51,21 @@ Plug 'lambdalisue/gina.vim'
 Plug 'airblade/vim-gitgutter'
 " Plug 'esneider/YUNOcommit.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'majutsushi/tagbar'
 
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
-Plug 'puremourning/vimspector'
+Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-chrome --enable-node' }
+
+" ================================================================================
+" Plug 'camspiers/animate.vim'
+" Plug 'camspiers/lens.vim'
+let g:lens#animate = 0
+let g:lens#height_resize_max = 60
+let g:lens#height_resize_min = 10
+let g:lens#width_resize_max = 120
+let g:lens#width_resize_min = 40
+" ================================================================================
 
 call plug#end()
 
@@ -173,20 +184,21 @@ nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
-function! s:fzf_statusline()
-  " Override statusline as you like
-  highlight fzf1 ctermfg=161 ctermbg=251
-  highlight fzf2 ctermfg=23 ctermbg=251
-  highlight fzf3 ctermfg=237 ctermbg=251
-  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-endfunction
+" function! s:fzf_statusline()
+"   " Override statusline as you like
+"   highlight fzf1 ctermfg=161 ctermbg=251
+"   highlight fzf2 ctermfg=23 ctermbg=251
+"   highlight fzf3 ctermfg=237 ctermbg=251
+"   setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+" endfunction
 
-autocmd! User FzfStatusLine call <SID>fzf_statusline()
+" autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 " vim-clap
 " ================================================================================
 let g:clap_no_matches_msg = "There is nothing here but the sound of the world's tiniest violin..."
 let g:clap_popup_input_delay = 0
+let g:clap_layout = { 'width': '84%', 'height': '33%', 'row': '33%', 'col': '8%' }
 "let g:clap_provider_grep_opts = '--hidden'
 " let g:clap_theme = { 'display': {'guifg': '#282828', 'ctermfg': 'red'}, 'current_selection': {'guifg': '#282828', 'ctermfg': 'red'} }
 " hi link ClapSpinner PmenuSel
@@ -213,7 +225,7 @@ let g:ale_fixers = {
             \'yaml': ['prettier'],
             \'json': ['prettier'],
             \}
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
 let g:ale_linters_explicit = 1
 " let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5'
 let g:ale_lint_on_text_changed = 'never'
@@ -230,7 +242,41 @@ let g:lightline = { 'colorscheme': 'gruvbox' }
 " Airline
 " ================================================================================
 let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#whitespace#enabled = 0
 let g:airline_theme='gruvbox'
+"let g:airline_section_b = 
+let g:airline_section_y = '%{&fileencoding}'
+let g:airline_section_z = '0x%B > %c:%l'
+
+let g:airline#extensions#hunks#enabled = 0
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_left_alt_sep = ''
+let g:airline_right_alt_sep = ''
+
+let g:airline_mode_map = {
+    \ '__'     : '---',
+    \ 'c'      : 'c',
+    \ 'i'      : 'i',
+    \ 'ic'     : 'i',
+    \ 'ix'     : 'i',
+    \ 'n'      : 'n',
+    \ 'multi'  : 'm',
+    \ 'ni'     : 'ni',
+    \ 'no'     : 'no',
+    \ 'R'      : 'r',
+    \ 'Rv'     : 'rv',
+    \ 's'      : 's',
+    \ 'S'      : 'S',
+    \ ''     : 'SB',
+    \ 't'      : 't',
+    \ 'v'      : 'v',
+    \ 'V'      : 'l',
+    \ ''     : 'b',
+    \ }
+
 
 " Indentation
 " ================================================================================
@@ -459,6 +505,18 @@ let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
 let g:tagbar_autofocus = 1
 nmap <silent> <Leader>ct :TagbarToggle<CR>
 
+" Vimspector
+" ====================================================================
+nmap <Leader>dc <Plug>VimspectorContinue
+nmap <Leader>ds <Plug>VimspectorStop
+nmap <Leader>dr <Plug>VimspectorRestart
+nmap <Leader>dp <Plug>VimspectorPause
+nmap <Leader>db <Plug>VimspectorToggleBreakpoint
+nmap <Leader>df <Plug>VimspectorAddFunctionBreakpoint
+nmap <Leader>do <Plug>VimspectorStepOver
+nmap <Leader>di <Plug>VimspectorStepInfo
+nmap <Leader>du <Plug>VimspectorStepOut
+nnoremap <Leader>dd :call vimspector#Launch()<CR>
 
 
 " General settings
@@ -475,6 +533,7 @@ set shiftwidth=2
 nmap <silent> <Leader>vpi :PlugInstall <CR>
 nmap <silent> <Leader>vpu :PlugUpdate <CR>
 nmap <silent> <Leader>vps :PlugStatus <CR>
+nmap <silent> <Leader>var :AirlineRefresh<CR>
 
 set cursorline     " highlight current line
 
