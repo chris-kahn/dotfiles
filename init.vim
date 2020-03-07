@@ -57,6 +57,9 @@ Plug 'majutsushi/tagbar'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 Plug 'puremourning/vimspector', { 'do': './install_gadget.py --enable-chrome --enable-node' }
 
+Plug 'vimwiki/vimwiki'
+
+
 " ================================================================================
 " Plug 'camspiers/animate.vim'
 " Plug 'camspiers/lens.vim'
