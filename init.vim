@@ -33,7 +33,8 @@ Plug 'psliwka/vim-smoothie'
 Plug 'chrisbra/colorizer'
 
 " better fuzzy search
-Plug '~/.local/share/nvim/plugged/vim-clap', { 'do': ':Clap install-binary!' }
+" Plug '~/.local/share/nvim/plugged/vim-clap', { 'do': ':Clap install-binary!' }
+Plug 'liuchengxu/vim-clap'
 
 " completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -84,7 +85,7 @@ let g:maplocalleader = ','
 
 
 " theme
-set background=light
+set background=dark
 colorscheme gruvbox
 let g:lightline = { 'colorscheme': 'gruvbox' }
 if &background ==# 'dark'
@@ -124,7 +125,7 @@ nmap <silent> <Leader>wsh :split <CR>
 
 
 " vim-clap
-let g:clap_theme = 'gruvbox_light'
+let g:clap_theme = 'solarized_dark'
 let g:clap_no_matches_msg = "There is nothing here but the sound of the world's tiniest violin..."
 let g:clap_popup_input_delay = 0
 let g:clap_layout = { 'width': '84%', 'height': '33%', 'row': '33%', 'col': '8%' }
