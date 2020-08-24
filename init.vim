@@ -7,6 +7,8 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " themes
 " Plug 'gruvbox-material/vim', {'as': 'gruvbox-material'}
 Plug 'morhetz/gruvbox'
+Plug 'jacoborus/tender.vim'
+Plug 'joshdick/onedark.vim'
 
 " airline
 Plug 'vim-airline/vim-airline'
@@ -86,8 +88,8 @@ let g:maplocalleader = ','
 
 " theme
 set background=dark
-colorscheme gruvbox
-let g:lightline = { 'colorscheme': 'gruvbox' }
+colorscheme onedark
+let g:lightline = { 'colorscheme': 'onedark' }
 if &background ==# 'dark'
   let g:indentLine_color_gui = '#3c3836'
 else
