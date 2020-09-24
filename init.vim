@@ -6,6 +6,8 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 
 " themes
 " Plug 'gruvbox-material/vim', {'as': 'gruvbox-material'}
+let g:gruvbox_contrast_light='hard'
+let g:gruvbox_sign_column='bg0'
 Plug 'morhetz/gruvbox'
 Plug 'jacoborus/tender.vim'
 Plug 'joshdick/onedark.vim'
@@ -87,14 +89,14 @@ let g:maplocalleader = ','
 
 
 " theme
-set background=dark
-colorscheme onedark
-let g:lightline = { 'colorscheme': 'onedark' }
-if &background ==# 'dark'
-  let g:indentLine_color_gui = '#3c3836'
-else
-  let g:indentLine_color_gui = '#d5c4a1'
-endif
+set background=light
+colorscheme gruvbox
+let g:lightline = { 'colorscheme': 'gruvbox' }
+" if &background ==# 'dark'
+"  let g:indentLine_color_gui = '#3c3836'
+"else
+  "let g:indentLine_color_gui = '#d5c4a1'
+"endif
 
 
 " tmux
@@ -127,7 +129,7 @@ nmap <silent> <Leader>wsh :split <CR>
 
 
 " vim-clap
-let g:clap_theme = 'solarized_dark'
+let g:clap_theme = 'solarized_light'
 let g:clap_no_matches_msg = "There is nothing here but the sound of the world's tiniest violin..."
 let g:clap_popup_input_delay = 0
 let g:clap_layout = { 'width': '84%', 'height': '33%', 'row': '33%', 'col': '8%' }

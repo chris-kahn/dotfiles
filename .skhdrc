@@ -145,16 +145,16 @@ alt - t : yabai -m window --toggle float;\
           yabai -m window --grid 4:4:1:1:2:2
 
 # toggle sticky (show on all spaces)
-alt - s : yabai -m window --toggle sticky
+# alt - s : yabai -m window --toggle sticky
 
 # toggle topmost (keep above other windows)
-alt - o : yabai -m window --toggle topmost
+# alt - o : yabai -m window --toggle topmost
 
 # toggle sticky(+float), topmost, border and picture-in-picture
-alt - p : yabai -m window --toggle sticky;\
-          yabai -m window --toggle topmost;\
-          yabai -m window --toggle border;\
-          yabai -m window --toggle pip
+# alt - p : yabai -m window --toggle sticky;\
+#          yabai -m window --toggle topmost;\
+#          yabai -m window --toggle border;\
+#          yabai -m window --toggle pip
 
 # change layout of desktop
 ctrl + alt - a : yabai -m space --layout bsp
