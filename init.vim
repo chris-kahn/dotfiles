@@ -1,5 +1,8 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
+" tree-sitter
+" Plug 'nvim-treesitter/nvim-treesitter'
+
 " tmux support
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -8,9 +11,14 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 " Plug 'gruvbox-material/vim', {'as': 'gruvbox-material'}
 let g:gruvbox_contrast_light='hard'
 let g:gruvbox_sign_column='bg0'
-Plug 'morhetz/gruvbox'
+let g:gruvbox_transparent_background=1
+let g:gruvbox_material_transparent_background=1
+Plug 'gruvbox-community/gruvbox'
+Plug 'sainnhe/gruvbox-material'
 Plug 'jacoborus/tender.vim'
 Plug 'joshdick/onedark.vim'
+
+" Plug 'franbach/gruvbox-material'
 
 " airline
 Plug 'vim-airline/vim-airline'
@@ -32,7 +40,11 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'mhinz/vim-signify'
 
 " visual perks
-Plug 'yggdroot/indentline'
+Plug 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#2e282a ctermbg=4
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#282224 ctermbg=4
+" Plug 'yggdroot/indentline'
 Plug 'psliwka/vim-smoothie'
 Plug 'chrisbra/colorizer'
 
@@ -42,6 +54,9 @@ Plug 'liuchengxu/vim-clap'
 
 " completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'vn-ki/coc-clap'
+Plug 'puremourning/vimspector'
 
 " Plug 'ncm2/ncm2'
 "Plug 'roxma/nvim-yarp'
@@ -60,6 +75,16 @@ Plug 'desmap/ale-sensible' | Plug 'w0rp/ale'
 call plug#end()
 
 " ================================================================================
+
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+"  highlight = {
+"    enable = true,              -- false will disable the whole extension
+"    disable = { "c", "rust" },  -- list of language that will be disabled
+"  },
+" }
+" EOF
 
 set termguicolors
 set hidden
@@ -83,20 +108,25 @@ set tabstop=2     " number of spaces that a <Tab> in the file counts for
 set softtabstop=2 " remove <Tab> symbols as it was spaces
 set shiftwidth=2
 
+let g:vimspector_enable_mappings = 'HUMAN'
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
 " Leader key
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
 
 " theme
-set background=light
-colorscheme gruvbox
-let g:lightline = { 'colorscheme': 'gruvbox' }
-" if &background ==# 'dark'
-"  let g:indentLine_color_gui = '#3c3836'
-"else
-  "let g:indentLine_color_gui = '#d5c4a1'
-"endif
+set background=dark
+colorscheme gruvbox-material
 
 
 " tmux
@@ -129,7 +159,7 @@ nmap <silent> <Leader>wsh :split <CR>
 
 
 " vim-clap
-let g:clap_theme = 'solarized_light'
+let g:clap_theme = 'atom_dark'
 let g:clap_no_matches_msg = "There is nothing here but the sound of the world's tiniest violin..."
 let g:clap_popup_input_delay = 0
 let g:clap_layout = { 'width': '84%', 'height': '33%', 'row': '33%', 'col': '8%' }
@@ -254,13 +284,48 @@ nmap <silent> <leader>cr <Plug>(coc-references)
 " Use K to show documentation in preview window
 nnoremap <silent> <leader>ck :call <SID>show_documentation()<CR>
 
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
+
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -269,9 +334,28 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
 
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
 " Remap for rename current word
 nmap <leader>cn <Plug>(coc-rename)
+"
+" Search workspace symbols.
+nnoremap <silent><nowait> <Leader>sc  :Clap coc_symbols<cr>
+nnoremap <silent><nowait> <Leader>so  :Clap coc_outline<cr>
 
+nnoremap <silent><nowait> <Leader>csd  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <Leader>cse  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <Leader>csc  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <Leader>cso  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <Leader>css  :<C-u>CocList -I symbols<cr>
 
 " Reload this config
 nmap <silent> <Leader>vr :source ~/.config/nvim/init.vim<CR>:echo "source ~/.config/nvim/init.vim"<CR>
@@ -354,7 +438,7 @@ let g:which_key_map =  {
     \ 'h': 'Split horizontal',
     \ 'v': 'Split vertical'
     \ }
-  \ },
+  \ }
 \ }
 
 "call which_key#register('<Space>', "g:which_key_map")
@@ -362,4 +446,3 @@ autocmd! User vim-which-key call which_key#register('<Space>', 'g:which_key_map'
 nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-
