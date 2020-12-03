@@ -44,5 +44,9 @@ yabai -m config left_padding                 24
 yabai -m config right_padding                24
 yabai -m config window_gap                   24
 
+# kill any existing limelight process if one exists, before we launch a new one
+killall limelight &> /dev/null
+limelight &> /dev/null &
+
 echo "yabai configuration loaded.."
 
