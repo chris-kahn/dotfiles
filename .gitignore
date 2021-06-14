@@ -1,0 +1,8 @@
+.DS_Store
+etc/nvim/plugin/packer_compiled.vim
+etc/fish/fish_variables
+etc/tmux/plugins/
+brew/home.brew.lock.json
+brew/common.brew.lock.json
+common.brew.lock.json
+home.brew.lock.json

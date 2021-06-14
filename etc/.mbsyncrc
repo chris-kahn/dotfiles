@@ -1,0 +1,32 @@
+# First section: remote IMAP account
+IMAPAccount kahnpro
+Host mail.ckio.net
+Port 993
+User chris@kahn.pro
+# For simplicity, this is how to read the password from another file.
+# For better security you should use GPG https://gnupg.org/
+PassCmd "cat ~/.mbsync-kahnpro"
+SSLType IMAPS
+SSLVersions TLSv1.2
+
+IMAPStore kahnpro-remote
+Account kahnpro
+
+# This section describes the local storage
+MaildirStore kahnpro-local
+Path ~/.mail/kahnpro/
+Inbox ~/.mail/kahnpro/INBOX
+# The SubFolders option allows to represent all
+# IMAP subfolders as local subfolders
+SubFolders Verbatim
+
+# This section a "channel", a connection between remote and local
+Channel kahnpro
+Master :kahnpro-remote:
+Slave :kahnpro-local:
+Patterns *
+Expunge None
+CopyArrivalDate yes
+Sync All
+Create Slave
+SyncState *

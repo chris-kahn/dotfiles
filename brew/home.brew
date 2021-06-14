@@ -1,0 +1,21 @@
+tap "mas-cli/tap"
+
+cask_args no_quarantine: true, appdir: "~/Applications"
+
+cask "bitwarden"
+cask "discord"
+cask "signal"
+cask "telegram"
+
+brew "mosh"
+brew "nmap"
+brew "p7zip"
+brew "youtube-dl"
+brew "isync"
+brew "neomutt"
+brew "notmuch"
+brew "msmtp"
+brew "abook"
+brew "w3m"
+
+mas "LINE", id: 539883307
