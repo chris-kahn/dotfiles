@@ -1,9 +1,11 @@
 tap "mas-cli/tap"
+tap "homebrew/cask-versions"
 
 cask_args no_quarantine: true, appdir: "~/Applications"
 
 cask "bitwarden"
 cask "discord"
+cask "microsoft-edge-beta"
 cask "signal"
 cask "telegram"
 

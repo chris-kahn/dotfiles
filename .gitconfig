@@ -1,0 +1,5 @@
+[user]
+	email = chris@kahn.pro
+	name = Christopher Kahn
+[pull]
+	rebase = false

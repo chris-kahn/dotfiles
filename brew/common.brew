@@ -1,5 +1,6 @@
 tap "mas-cli/tap"
 tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
 tap "jason0x43/homebrew-neovim-nightly"
 tap "clementtsang/bottom"
 tap "koekeishiya/formulae"
